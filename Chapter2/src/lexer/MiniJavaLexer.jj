@@ -1,0 +1,121 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options {
+  static = false;
+  JAVA_UNICODE_ESCAPE = true;
+}
+
+PARSER_BEGIN(MiniJavaParser)
+  package lexer;
+  public class MiniJavaParser {}
+PARSER_END(MiniJavaParser)
+
+
+// Insert a specification of a lexical analysis here.
+TOKEN : {
+  < CLASS: "class" >
+  | < LEFT_BRACE: "{" >
+  | < PUBLIC: "public" >
+  | < STATIC: "static" >
+  | < VOID: "void" >
+  | < MAIN: "main" >
+  | < LEFT_PARENTHESES: "(" >
+  | < STRING: "String" >
+  | < LEFT_BRACKET: "[" >
+  | < RIGHT_BRACKET: "]" >
+  | < RIGHT_PARENTHESES: ")" >
+  | < RIGHT_BRACE: "}" >
+  | < EXTENDS: "extends" >
+  | < SEMICOLON: ";" >
+  | < RETURN: "return" >
+  | < COMMA: "," >
+  | < INT: "int" >
+  | < BOOLEAN: "boolean" >
+  | < ASSIGN: "=" >
+  | < IF: "if" >
+  | < ELSE: "else" >
+  | < WHILE: "while" >
+  | < SYSTEM_OUT_PRINTLN: "System.out.println" >
+  | < AND: "&&" >
+  | < LESS_THAN: "<" >
+  | < PLUS: "+" >
+  | < MINUS: "-" >
+  | < TIMES: "*" >
+  | < DOT: "." >
+  | < LENGTH: "length" >
+  | < INTEGER_LITERAL: (< DIGIT >)+ >
+  | < TRUE: "true" >
+  | < FALSE: "false" >
+  | < THIS: "this" >
+  | < NEW: "new" >
+  | < NOT: "!" >
+  | < #DIGIT: (["0"-"9"]) >
+  | < IDENTIFIER: (["a"-"z","A"-"Z"] (["a"-"z","A"-"Z","0"-"9"] | < DIGIT >)*) >
+}
+/*
+TOKEN : {
+  < #DIGIT: (["0"-"9"]) >
+  | < IDENTIFIER: (["a"-"z","A"-"Z"] (["a"-"z","A"-"Z","0"-"9"] | < DIGIT >)*) >
+  | < INTEGER_LITERAL: (< DIGIT >)+ >
+  | < OPERATOR: ("+" | "-" | "*" | "<" | "&&") >
+  | < PROGRAM: (< MAIN_CLASS > (< CLASS_DECLARATION >)*) >
+  | < MAIN_CLASS: ("class" < IDENTIFIER > "{" "public" "static" "void" "main" "(" "String" "[" "]" < IDENTIFIER > ")" "{" < STATEMENT > "}" "}") >
+  | < CLASS_DECLARATION: ("class" < IDENTIFIER > ("extends" < IDENTIFIER >)? "{" (< VARIABLE_DECLARATION >)* (< METHOD_DECLARATION >)* "}") >
+  | < VARIABLE_DECLARATION: (< TYPE > < IDENTIFIER >) >
+  | < METHOD_DECLARATION: ("public" < TYPE > < IDENTIFIER > "(" < FORMAL_LIST > ")" "{" (< VARIABLE_DECLARATION >)* (< STATEMENT >)* "return" < EXPRESSION > ";" "}") >
+  | < FORMAL_LIST: (< TYPE > < IDENTIFIER > (< FORMAL_REST >)*)? >
+  | < FORMAL_REST: ("," < TYPE > < IDENTIFIER >) >
+  | < TYPE: ("int" "[" "]") | ("boolean") | ("int") | (< IDENTIFIER >) >
+  | < STATEMENT: ("{" (< STATEMENT >)* " }")
+  				| ("if" "(" < EXPRESSION > ")" < STATEMENT > "else" < STATEMENT >)
+  				| ("while" "(" < EXPRESSION > ")" < STATEMENT >)
+  				| ("System.out.println" "(" < EXPRESSION > ")" ";")
+  				| (< IDENTIFIER > "=" < EXPRESSION > ";")
+  				| (< IDENTIFIER > "[" < EXPRESSION > "]" "=" < EXPRESSION > ";") >
+  | < EXPRESSION: (< EXPRESSION > < OPERATOR > < EXPRESSION >)
+  				| (< EXPRESSION > "[" < EXPRESSION > "]")
+  				| (< EXPRESSION > "." "length")
+  				| (< EXPRESSION > "." < IDENTIFIER > "(" < EXPRESSION_LIST > ")")
+  				| (< INTEGER_LITERAL >)
+  				| ("true")
+  				| ("false")
+  				| (< IDENTIFIER >)
+  				| ("this")
+  				| ("new" "int" "[" < EXPRESSION > "]")
+  				| ("new" < IDENTIFIER > "(" ")")
+  				| ("!" < EXPRESSION >)
+  				| ("(" < EXPRESSION > ")") >
+  | < EXPRESSION_LIST: (< EXPRESSION > (< EXPRESSION_LIST_REST >)*)? >
+  | < EXPRESSION_LIST_REST: ("," < EXPRESSION >) >
+}
+*/
+
+SKIP : {
+  < " " >
+  | < "\t" >
+  | < "\n" >
+  | < "//" (["a"-"z"] | ["A"-"Z"] | ["0" - "9"])* ("\n" | "\r" | "\r\n") >
+  | < "/*" (["a"-"z","A"-"Z","0"-"9"])* "*/" >
+}
+
+// The following is a simple grammar that will allow you
+// to test the generated lexer.
+
+
+void Goal() :
+{}
+{
+  ( MiniJavaToken() )*
+  <EOF>
+}
+
+void MiniJavaToken():
+{}
+{
+  "class"  |  <IDENTIFIER> | "{" | "public" | "static" | "void" |
+  "main" | "(" | "String"  | "[" | "]" | ")" | "}" | "extends" | ";"
+  | "return" | "," | "int" | "boolean" | "=" | "if" | "else" | "while"
+  | "System.out.println" | "&&" | "<" | "+" | "-" | "*" | "." |
+  "length" | <INTEGER_LITERAL> | "true" | "false" | "this" | "new" |
+  "!"
+}

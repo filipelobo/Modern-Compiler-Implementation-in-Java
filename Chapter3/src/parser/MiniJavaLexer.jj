@@ -1,0 +1,182 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options {
+  static = false;
+  JAVA_UNICODE_ESCAPE = true;
+}
+
+PARSER_BEGIN(MiniJavaParser)
+  package parser;
+  public class MiniJavaParser {}
+PARSER_END(MiniJavaParser)
+
+
+// Insert a specification of a lexical analysis here.
+TOKEN : {
+  < CLASS: "class" >
+  | < LEFT_BRACE: "{" >
+  | < PUBLIC: "public" >
+  | < STATIC: "static" >
+  | < VOID: "void" >
+  | < MAIN: "main" >
+  | < LEFT_PARENTHESES: "(" >
+  | < STRING: "String" >
+  | < LEFT_BRACKET: "[" >
+  | < RIGHT_BRACKET: "]" >
+  | < RIGHT_PARENTHESES: ")" >
+  | < RIGHT_BRACE: "}" >
+  | < EXTENDS: "extends" >
+  | < SEMICOLON: ";" >
+  | < RETURN: "return" >
+  | < COMMA: "," >
+  | < INT: "int" >
+  | < BOOLEAN: "boolean" >
+  | < ASSIGN: "=" >
+  | < IF: "if" >
+  | < ELSE: "else" >
+  | < WHILE: "while" >
+  | < SYSTEM_OUT_PRINTLN: "System.out.println" >
+  | < AND: "&&" >
+  | < LESS_THAN: "<" >
+  | < PLUS: "+" >
+  | < MINUS: "-" >
+  | < TIMES: "*" >
+  | < DOT: "." >
+  | < LENGTH: "length" >
+  | < TRUE: "true" >
+  | < FALSE: "false" >
+  | < THIS: "this" >
+  | < NEW: "new" >
+  | < NOT: "!" >
+  | < #DIGIT: (["0"-"9"]) >
+  | < #LETTER: (["_","a"-"z","A"-"Z"]) >
+  | < INTEGER_LITERAL: (< DIGIT >)+ >
+  | < IDENTIFIER: (< LETTER > (< LETTER > | < DIGIT >)*) >
+}
+
+SKIP : {
+  < " " >
+  | < "\t" >
+  | < "\n" >
+  | < "//" (["a"-"z"] | ["A"-"Z"] | ["0" - "9"])* ("\n" | "\r" | "\r\n") >
+  | < "/*" (["a"-"z","A"-"Z","0"-"9"])* "*/" >
+}
+
+// The following is a simple grammar that will allow you
+// to test the generated lexer.
+
+void Program() : { } {
+  MainClass() (ClassDecl())*
+}
+
+void MainClass() : { } {
+  < CLASS > < IDENTIFIER > < LEFT_BRACE > < PUBLIC > < STATIC > < VOID > < MAIN > < LEFT_PARENTHESES > < STRING >
+  < LEFT_BRACKET > < RIGHT_BRACKET > < IDENTIFIER > < RIGHT_PARENTHESES > < LEFT_BRACE > Statement() < RIGHT_BRACE >
+  < RIGHT_BRACE >
+}
+
+void ClassDecl() : { } {
+  < CLASS > < IDENTIFIER > ClassDeclRest()
+}
+
+void ClassDeclRest() : { } {
+  < EXTENDS > < IDENTIFIER > < LEFT_BRACE > (VarDecl())* (MethodDecl())* < RIGHT_BRACE >
+  | < LEFT_BRACE > (VarDecl())* (MethodDecl())* < RIGHT_BRACE >
+}
+
+void VarDecl() : { } {
+  Type() < IDENTIFIER > < SEMICOLON >
+}
+
+void MethodDecl() : { } {
+  < PUBLIC > Type() < IDENTIFIER > < LEFT_PARENTHESES > FormalList() < RIGHT_PARENTHESES >
+  < LEFT_BRACE > (VarDecl())* (Statement())* < RETURN > Expression() < SEMICOLON > < RIGHT_BRACE >
+}
+
+void FormalList() : { } {
+  (Type() < IDENTIFIER > (FormalRest())*)?
+}
+
+void FormalRest() : { } {
+  < COMMA > Type() < IDENTIFIER >
+}
+
+void Type() : { } {
+  LOOKAHEAD(2) (< INT >) | (< INT > < LEFT_BRACKET > < RIGHT_BRACKET >) | (< BOOLEAN >) | (< IDENTIFIER >)
+}
+
+void Statement() : { } {
+  CompoundStatement()
+  | LOOKAHEAD(2) (< IDENTIFIER > < ASSIGN > Expression() < SEMICOLON >)
+  | (< IDENTIFIER > < LEFT_BRACKET > Expression() < RIGHT_BRACKET > < ASSIGN > Expression() < SEMICOLON >)
+  | (< SYSTEM_OUT_PRINTLN > < LEFT_PARENTHESES > Expression() < RIGHT_PARENTHESES > < SEMICOLON >)
+  | (< WHILE > < LEFT_PARENTHESES > Expression() < RIGHT_PARENTHESES > Statement())
+  | (< IF > < LEFT_PARENTHESES > Expression() < RIGHT_PARENTHESES > Statement() < ELSE > Statement())
+}
+
+void CompoundStatement() : { } {
+  < LEFT_BRACE > (Statement())* < RIGHT_BRACE >
+}
+
+void Expression() : { } {
+  BooleanOperationExpression()
+}
+
+void BooleanOperationExpression() : { } {
+  LessThanExpression() (LOOKAHEAD(2) < AND > LessThanExpression())* 
+}
+
+void LessThanExpression() : { } {
+  IntegerOperationExpression() (< LESS_THAN > IntegerOperationExpression())*
+}
+
+void IntegerOperationExpression() : { } {
+  TimesExpression() (LOOKAHEAD(2) (< PLUS > | < MINUS >) TimesExpression())*
+}
+
+void TimesExpression() : { } {
+  PrefixExpression() (LOOKAHEAD(2) < TIMES > PrefixExpression())*
+}
+
+void PrefixExpression() : { } {
+  NotExpression() | DotExpression()
+}
+
+void NotExpression() : { } {
+  (< NOT >)+ DotExpression()
+}
+
+void DotExpression() : { } {
+  TerminalExpression()
+  (
+    (< LEFT_BRACKET > Expression() < RIGHT_BRACKET >)
+  	| (< DOT > ((< IDENTIFIER > < LEFT_PARENTHESES > ExpressionList() < RIGHT_PARENTHESES >)
+  	            | < LENGTH >)
+  	  )
+  )*
+}
+
+void ExpressionList() : { } {
+  (Expression() (ExpressionListRest())*)?
+}
+
+void ExpressionListRest() : { } {
+  < COMMA > Expression()
+}
+
+void TerminalExpression() : { } {
+  < INTEGER_LITERAL >
+  | < TRUE >
+  | < FALSE >
+  | < IDENTIFIER >
+  | < THIS >
+  | (< LEFT_PARENTHESES > Expression() < RIGHT_PARENTHESES >)
+  | LOOKAHEAD(2) (< NEW > NewExpression())
+}
+
+void NewExpression() : { } {
+  (< INT > < LEFT_BRACKET > Expression() < RIGHT_BRACKET >)
+  | (< IDENTIFIER > < LEFT_PARENTHESES > < RIGHT_PARENTHESES >) 
+}
+
